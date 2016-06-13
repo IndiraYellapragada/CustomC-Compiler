@@ -1,0 +1,60 @@
+
+/*BNF For C++ baby language								---By  Indira Yellapragada*/
+					
+					
+/*** This is BNF for custom C++ language 
+IT indicates allowed grammar in the language.
+Statements allowed are assign_stmt,if stmt,cin_stmt,cout_stmt and operation_stmt,declarationstmt
+operation_stmt does all the mathematical operations like +,-*,/,%
+If_stmt allows only if and if_else also.*/
+	
+
+
+mainstart       :{func_protocol} MAIN BEGINTOK stmt {stmt} ENDTOK  {function_def} 				
+stmt            :function_call							
+				|cinstmt                
+                |coutstmt                               
+                |ifstmt                                
+                |whileloopstmt                 
+                |declstmt 		
+				|arraydecl                              
+				|operation_stmt
+				|BEGINTOK {stmt} ENDTOK		
+				|arrayassign				
+				
+cinstmt         :CINTOK '>>' IDTOK SEMICOLON          
+
+coutstmt        :       COUTTOK '<<' expr SEMICOLON        
+				|COUTTOK LD STRLITTOK SEMICOLON		
+				
+declstmt		:DATATYPETOK {id} SEMICOLON	
+				|DATATYPETOK {assignment}		
+
+whileloopstmt   :WHILETOK '(' express	 ')' BEGINTOK {stmt} ENDTOK 
+
+ifstmt          :IFTOK '(' express')' BEGINTOK {stmt} ENDTOK {elsestmt} 
+elsestmt		:ELSETOK BEGINTOK {stmt} ENDTOK   
+
+assignment      :operation_stmt SEMICOLON 
+operation_stmt  :IDTOK ASSIGNTOK express
+expprime 		:ADDOPTOK term expprime | epsilon
+term			:relfactor termprime
+termprime 		:MULOPTOK relfactor termprime | epsilons
+relfactor 		:factor factorprime
+factorprime 	:RELOPTOK factor | epsilon
+factor 		:NOTTOK factor | idnonterm | LITTOK | ( express )       
+
+arraydecl       :DATATYPETOK IDTOK'[' LITTOK ']'  SEMICOLON  
+                | DATATYPETOK IDTOK '[' LITTOK ']' SEMICOLON ASSIGNTOK LITTOK  
+arrayassign	:IDTOK '[' LITTOK ']' ASSIGNTOK expr SEMICOLON
+		
+function_def	:DATATYPETOK IDTOK '(' function_param ')' BEGINTOK stmt {stmt} RETURNTOK IDTOK SEMICOLON ENDTOK  
+func_protocol   :DATATYPETOK IDTOK '(' {DATATYPETOK} ')' SEMICOLON 
+function_call	:IDTOK ASSIGNTOK IDTOK '(' function_arg ')' SEMICOLON
+function_arg	:LITTOK COMMATOK function_arg 
+				|LITTOK  
+				|IDTOK 
+function_param	:DATATYPETOK IDTOKent COMMATOK function_param 
+				|DATATYPETOK IDTOKent      
+
+				
